@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { cn } from "../../utils";
 
 const VARIANTS = {
@@ -16,13 +17,16 @@ const SIZES = {
 };
 
 export default function Button({
-  as: Comp = "button",
+  as = "button",
   variant = "primary",
   size = "sm",
   className = "",
   children,
   ...props
 }) {
+  // If `as="a"` use React Router Link
+  const Comp = as === "a" ? Link : as;
+
   return (
     <Comp
       className={cn(

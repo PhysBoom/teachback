@@ -1,69 +1,16 @@
-import React from "react";
-import SiteShell from "../components/layout/SiteShell.jsx";
 import Header from "../components/layout/Header.jsx";
 import Footer from "../components/layout/Footer.jsx";
 import Section from "../components/layout/Section.jsx";
 
 import Button from "../components/ui/Button.jsx";
-import Card from "../components/ui/Card.jsx";
 import Icon from "../components/ui/Icon.jsx";
-import AvatarStack from "../components/ui/AvatarStack.jsx";
 
-function Pill({ label }) {
-  return (
-    <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-3 py-1 rounded-full w-fit">
-      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-      <span className="text-primary font-semibold uppercase text-[10px] tracking-widest">
-        {label}
-      </span>
-    </div>
-  );
-}
+import Pill from "../components/ui/landing/Pill.jsx";
+import FeatureCard from "../components/ui/landing/FeatureCard.jsx";
+import SiteShell from "../components/ui/landing/SiteShell.jsx";
 
-function StatTile({ tone = "primary", label, value, sublabel }) {
-  const toneClasses =
-    tone === "orange" ? "hover:border-accent-orange/40" : "hover:border-primary/40";
-  const labelTone = tone === "orange" ? "text-accent-orange" : "text-primary";
-
-  return (
-    <Card className={`bg-navy-dark/40 p-8 border-slate-800/50 ${toneClasses}`}>
-      <p className={`${labelTone} font-bold uppercase tracking-wider text-[10px] mb-2`}>
-        {label}
-      </p>
-      <p className="text-white text-4xl font-bold tracking-tight">{value}</p>
-      <p className="text-slate-500 font-medium mt-1 text-sm">{sublabel}</p>
-    </Card>
-  );
-}
-
-function FeatureCard({ icon, iconWrapClassName, title, description }) {
-  return (
-    <Card className="bg-white p-8 border-slate-200 rounded-2xl hover:shadow-lg transition-shadow">
-      <div className={`w-14 h-14 flex items-center justify-center mb-6 rounded-xl ${iconWrapClassName}`}>
-        <Icon name={icon} className="text-3xl" />
-      </div>
-      <h3 className="text-xl font-bold tracking-tight mb-3">{title}</h3>
-      <p className="text-slate-600 leading-relaxed text-sm">{description}</p>
-    </Card>
-  );
-}
 
 export default function LandingPage() {
-  const avatars = [
-    {
-      alt: "User 1",
-      src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBC12QeJeGmgnrAwbMDxuMG95Oq5FYTDldTpIKuCxwJj5QXUVyRCdvQkLcNfwea3rsr7I1eYZcjVDUIpUscSw6ksZszhv9DKF-VffkidKCbGAjoAFmxIdzyg1ujiBEN5bPigVj5rHQd-zkrvanehpwUMdYmdxAAX5hr7Jv-Mk1BjhHim8yQSl7VVl0yuMXiMi_l8bKlwDwuLvjL4uz64d6psIpbySsxWcll6xLcxeUZdqgJ15lpXDwS2zUzkmLwR_x2BvowZv-lr-A",
-    },
-    {
-      alt: "User 2",
-      src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ7wW9FCK0FdICmT7230EqItBU6iYbwDupAvZvWNRi-gyO3uiMBQDrx31Fyq2-vf0_evO7gbsJE5st1j2EKi4HMNlYDzU7vLfGAmoQ4MqaWPyrPwi_BXJMVvpMWaIc6HRhygZLpyFtHhZJGJNeno3xOIENs-N2o28SJDyLxPszdZ0J0at7K3fNPBEgLo4tVwoOW_2RBJsTwbUpXhsd6tpcWp0OKl3rYOallNoVzyYcNipZUX5k8NznYaJmcqo0a1b0okU8W7Fzhck",
-    },
-    {
-      alt: "User 3",
-      src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDDLFOdmFtZ4-xYXLQIPUzatBN_-6Qc6pvPoO6MlDRkQBN7YnQX5xFl5uVnaeQR9qT1DbS5vJcWjN97NZpnup2NNm3e2FvD9E82fcbxIYODdAATYJMnuuEGQq0tdMOs53auUD0-UcWmBcObcbqo7rsC1gF4HKbxnRbfDfsJFqnnNEDPUhQaqcs_fhDWUOucsWrgxB8sgG2MtY6Rwk7nh8VuYwQBuqJ8UdFbTXDJ8MKkyVMYsUKW-voya9B_sJJWK0enYbWIjJdv5ak",
-    },
-  ];
-
   return (
     <SiteShell>
       <Header />
@@ -91,13 +38,6 @@ export default function LandingPage() {
                   Explore Topics
                 </Button>
               </div>
-
-              <div className="flex items-center gap-6 pt-6 border-t border-slate-800/50">
-                <AvatarStack users={avatars} />
-                <p className="text-sm font-medium text-slate-400">
-                  <span className="text-primary font-bold">12K+</span> learners already growing
-                </p>
-              </div>
             </div>
 
             <div className="lg:w-1/2 relative group">
@@ -110,26 +50,7 @@ export default function LandingPage() {
                 />
                 <div className="absolute inset-0 bg-navy-deep/20" />
               </div>
-
-              <div className="absolute -bottom-6 -right-4 bg-navy-dark text-white p-5 border border-slate-800 shadow-xl z-20 rounded-xl">
-                <div className="flex items-center gap-3">
-                  <Icon name="groups" className="text-3xl text-primary" />
-                  <div>
-                    <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider leading-none mb-1">
-                      Active Peers
-                    </p>
-                    <p className="text-2xl font-bold tracking-tight">2,480+</p>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-32">
-            <StatTile label="Growth" value="50K+" sublabel="Community Members" />
-            <StatTile tone="orange" label="Breadth" value="200+" sublabel="Learning Circles" />
-            <StatTile label="Quality" value="4.9/5" sublabel="Session Rating" />
           </div>
         </Section>
 
@@ -184,10 +105,6 @@ export default function LandingPage() {
               <Button size="lg" variant="primary">
                 Join the Community
               </Button>
-
-              <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest">
-                Always free to get started • No credit card required
-              </p>
             </div>
           </div>
         </section>
