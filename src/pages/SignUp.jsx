@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/layout/Header"; // keep if you already have it
-import Button from "../components/ui/Button"; // your polymorphic Button (optional). If you don't have it, replace with <button> tags.
+import Button from "../components/ui/Button";
 import Logo from "../components/ui/Logo";
 
 function Divider({ label = "Or with email" }) {
@@ -37,7 +36,7 @@ function TextField({ label, id, type = "text", placeholder, value, onChange }) {
   );
 }
 
-function GoogleButton({ onClick }) {
+function GoogleButton({ onClick, isSigningUp }) {
   return (
     <button
       type="button"
@@ -62,37 +61,45 @@ function GoogleButton({ onClick }) {
           fill="#EA4335"
         />
       </svg>
-      Sign up with Google
+      {isSigningUp ? "Sign up with Google" : "Sign in with Google"}
     </button>
   );
 }
 
-function LeftPanel() {
+function LeftPanel({ isSigningUp}) {
   return (
     <div className="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden border-r border-slate-800/50 bg-navy-deep">
-      <Header showLogoOnly />
+      <Logo />
 
       <div className="relative z-10 max-w-lg">
         <h1 className="text-white text-6xl font-bold leading-tight tracking-tight mb-8 font-serif">
+          {isSigningUp ? 
+          <>
           Start your <br />
           <span className="text-primary italic">teaching</span> journey.
+          </> : 
+          <>
+          Welcome <br />
+          <span className="text-primary italic">back</span>
+          </>}
         </h1>
 
-        <div className="flex items-center gap-4 p-6 bg-navy-dark/40 border border-slate-800 rounded-2xl backdrop-blur-sm">
+        {isSigningUp ? <div className="flex items-center gap-4 p-6 bg-navy-dark/40 border border-slate-800 rounded-2xl backdrop-blur-sm">
           <div className="flex -space-x-3">
             <div className="w-10 h-10 rounded-full border-2 border-navy-deep bg-slate-700" />
             <div className="w-10 h-10 rounded-full border-2 border-navy-deep bg-slate-600" />
             <div className="w-10 h-10 rounded-full border-2 border-navy-deep bg-primary flex items-center justify-center text-[10px] font-bold text-white">
-              50K+
             </div>
           </div>
           <div>
-            <p className="text-white font-bold text-sm">Join 50,000+ learners</p>
+            <p className="text-white font-bold text-sm">Join our community</p>
             <p className="text-slate-500 text-xs">
               Mastering subjects through peer teaching.
             </p>
           </div>
         </div>
+        : <p className="text-slate-400 text-xl font-medium mb-12 max-w-md">Continue your mastery through teaching</p>    
+    }
       </div>
 
       <footer className="relative z-10">
@@ -104,7 +111,7 @@ function LeftPanel() {
   );
 }
 
-function SignUpForm() {
+function SignUpForm({ isSigningUp, setIsSigningUp}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -128,18 +135,18 @@ function SignUpForm() {
 
       <div className="mb-10 text-center lg:text-left">
         <h2 className="text-navy-deep text-3xl font-bold mb-2 font-serif">
-          Create an account
+          {isSigningUp ? "Create your account" : "Log in to Teachback"}
         </h2>
         <p className="text-slate-500 font-medium">
-          Already have an account?{" "}
-          <Link className="text-primary font-bold hover:underline" to="/login">
-            Log in
-          </Link>
+          {isSigningUp ? "Already have an account? " : "Don't have an account? "}
+          <a className="text-primary font-bold hover:underline cursor-pointer" onClick={() => setIsSigningUp(!isSigningUp)}>
+            {isSigningUp ? "Log in" : "Sign up"}
+          </a>
         </p>
       </div>
 
       <div className="space-y-6">
-        <GoogleButton onClick={onGoogle} />
+        <GoogleButton onClick={onGoogle} isSigningUp={isSigningUp} />
         <Divider />
 
         <form className="space-y-4" onSubmit={onSubmit}>
@@ -168,47 +175,25 @@ function SignUpForm() {
           />
 
           <div className="pt-4">
-            {/* If you have your Button component, use it. Otherwise swap to <button> */}
-            {Button ? (
               <Button type="submit" size="md" className="w-full">
-                Create Account
+                {isSigningUp ? "Create Account" : "Log In"}
               </Button>
-            ) : (
-              <button
-                type="submit"
-                className="w-full py-4 bg-primary text-white font-bold text-lg border border-black shadow-hard hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
-              >
-                Create Account
-              </button>
-            )}
           </div>
         </form>
-
-        <p className="text-center text-slate-400 text-[10px] leading-relaxed">
-          By signing up, you agree to our{" "}
-          <Link className="underline" to="/terms">
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link className="underline" to="/privacy">
-            Privacy Policy
-          </Link>
-          .
-        </p>
       </div>
     </div>
   );
 }
 
 export default function SignUpPage() {
+  const [isSigningUp, setIsSigningUp] = useState(false);
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-      <LeftPanel />
+      <LeftPanel isSigningUp={isSigningUp} setIsSigningUp={setIsSigningUp} />
 
       <div className="bg-white text-navy-deep flex flex-col justify-center items-center px-6 md:px-12 lg:px-24 py-12">
-        {/* keep your existing header if you want it on the right side too */}
-        {/* <Header /> */}
-        <SignUpForm />
+        <SignUpForm isSigningUp={isSigningUp} setIsSigningUp={setIsSigningUp} />
       </div>
     </div>
   );

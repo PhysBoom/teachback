@@ -3,7 +3,7 @@ import Button from "../ui/Button.jsx";
 
 export default function Header({ showLogoOnly = false, className="", logoTextColor="" }) {
   return (
-    <header className={`flex items-center justify-between border-b border-slate-800/60 px-6 md:px-12 py-5 sticky top-0 bg-navy-deep/80 backdrop-blur-md z-50 ${className}`}>
+    <header className={`flex items-center justify-between border-b border-slate-800/60 px-6 md:px-12 py-5 sticky top-0 bg-navy-deep backdrop-blur-md z-50 ${className}`}>
       <Logo textColor={logoTextColor} />
 
       {!showLogoOnly && 
