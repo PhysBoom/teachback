@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";
 import Logo from "../components/ui/Logo";
+import { useNavigate } from "react-router-dom";
 
 function Divider({ label = "Or with email" }) {
   return (
@@ -112,19 +113,18 @@ function LeftPanel({ isSigningUp}) {
 }
 
 function SignUpForm({ isSigningUp, setIsSigningUp}) {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function onSubmit(e) {
     e.preventDefault();
-    // TODO: hook into your auth flow
-    console.log({ name, email, password });
+    navigate("/dashboard");
   }
 
   function onGoogle() {
-    // TODO: hook into Google OAuth
-    console.log("Google signup");
+    navigate("/dashboard");
   }
 
   return (

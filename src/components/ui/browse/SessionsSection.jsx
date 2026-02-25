@@ -1,6 +1,6 @@
 import React from "react";
 import CreateTopicCard from "../CreateTopicCard";
-import SessionCard from "../SessionCard";
+import SessionCard from "../session-card/SessionCard";
 import Pagination from "../Pagination";
 
 export default function SessionsSection({
@@ -42,7 +42,7 @@ export default function SessionsSection({
           <SessionCard key={s.id} session={s} onCta={() => onCta?.(s)} />
         ))}
 
-        <CreateTopicCard onClick={onCreateTopic} />
+        <CreateTopicCard onClick={onCreateTopic} title="Can't find a topic?" description="Schedule your own session today!"/>
       </div>
 
       <Pagination />

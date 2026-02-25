@@ -40,18 +40,6 @@ export default function BrowseClassesPage() {
         cta: { type: "countdown", label: "14h : 22m" },
       },
       {
-        id: "stoicism",
-        topic: "Humanities",
-        dateLabel: "Oct 24, 6:00 PM",
-        title: "Stoicism in the Modern Workplace",
-        description:
-          "Applying Marcus Aurelius to corporate life. Peer teaching workshop on emotional resilience.",
-        teacher: { name: "Marcus Chen", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ7wW9FCK0FdICmT7230EqItBU6iYbwDupAvZvWNRi-gyO3uiMBQDrx31Fyq2-vf0_evO7gbsJE5st1j2EKi4HMNlYDzU7vLfGAmoQ4MqaWPyrPwi_BXJMVvpMWaIc6HRhygZLpyFtHhZJGJNeno3xOIENs-N2o28SJDyLxPszdZ0J0at7K3fNPBEgLo4tVwoOW_2RBJsTwbUpXhsd6tpcWp0OKl3rYOallNoVzyYcNipZUX5k8NznYaJmcqo0a1b0okU8W7Fzhck" },
-        image:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuBC12QeJeGmgnrAwbMDxuMG95Oq5FYTDldTpIKuCxwJj5QXUVyRCdvQkLcNfwea3rsr7I1eYZcjVDUIpUscSw6ksZszhv9DKF-VffkidKCbGAjoAFmxIdzyg1ujiBEN5bPigVj5rHQd-zkrvanehpwUMdYmdxAAX5hr7Jv-Mk1BjhHim8yQSl7VVl0yuMXiMi_l8bKlwDwuLvjL4uz64d6psIpbySsxWcll6xLcxeUZdqgJ15lpXDwS2zUzkmLwR_x2BvowZv-lr-A",
-        cta: { type: "secondary", label: "Set Reminder" },
-      },
-      {
         id: "behavioral-econ",
         topic: "Psychology",
         dateLabel: "Oct 25, 2:00 PM",

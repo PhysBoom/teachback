@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CreateTopicCard({ onClick }) {
+export default function CreateTopicCard({ onClick, title, description }) {
   return (
     <button
       type="button"
@@ -14,9 +14,9 @@ export default function CreateTopicCard({ onClick }) {
           </svg>
         </span>
       </div>
-      <h3 className="text-lg font-bold text-navy-deep">Can't find a topic?</h3>
+      <h3 className="text-lg font-bold text-navy-deep">{title}</h3>
       <p className="text-slate-500 text-sm mt-2 max-w-[200px]">
-        Start your own peer teaching circle and master a subject today.
+        {description}
       </p>
     </button>
   );
