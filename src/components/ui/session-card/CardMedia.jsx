@@ -1,7 +1,7 @@
 import EditMenu from "./EditMenu";
 import TopicBadge from "./TopicBadge";
 
-export default function CardMedia({ image, topic }) {
+export default function CardMedia({ image, topic, showEditMenu = false }) {
   return (
     <div className="h-48 relative overflow-hidden">
       {image ? (
@@ -21,7 +21,7 @@ export default function CardMedia({ image, topic }) {
       )}
       <div className="flex flex-row absolute top-4 justify-between w-full px-4">
         <TopicBadge topic={topic} />
-        <EditMenu onEditClicked={() => console.log("Edit clicked")} onDeleteClicked={() => console.log("Delete clicked")}/>
+        {showEditMenu && <EditMenu onEditClicked={() => console.log("Edit clicked")} onDeleteClicked={() => console.log("Delete clicked")}/>}
       </div>
     </div>
   );

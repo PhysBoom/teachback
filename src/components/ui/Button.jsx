@@ -8,6 +8,7 @@ const VARIANTS = {
   secondary:
     "bg-transparent text-slate-300 border border-slate-700 hover:bg-white/5 transition-all",
   ghost: "text-slate-300 hover:text-white transition-colors",
+  "accent-orange": "bg-accent-orange text-white border border-black shadow-hard hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all",
 };
 
 const SIZES = {
@@ -30,7 +31,7 @@ export default function Button({
   return (
     <Comp
       className={cn(
-        "inline-flex items-center justify-center",
+        "inline-flex items-center justify-center cursor-pointer",
         VARIANTS[variant],
         SIZES[size],
         className
