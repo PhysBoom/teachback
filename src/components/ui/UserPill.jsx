@@ -6,13 +6,13 @@ export default function UserPill({ name, avatar, textColor, onClick = undefined,
     const auth = useContext(AuthContext)
     return (
         <div className="flex flex-row gap-8 items-center">
-        <button className={`flex items-center gap-2 ${textColor || "text-slate-700"} ${onClick ? "cursor-pointer" : ""}`} onClick={onClick}>
+        <button className={`flex items-center gap-2 ${textColor || "text-slate-700 dark:text-white"} ${onClick ? "cursor-pointer" : ""}`} onClick={onClick}>
             <img
                 className="w-8 h-8 rounded-full border border-slate-200 object-cover"
                 src={avatar}
                 alt={name}
             />
-            <span className={`text-xs font-bold ${textColor || "text-slate-700"}`}>
+            <span className={`text-xs font-bold ${textColor || "text-slate-700 dark:text-white"}`}>
                 {name}
             </span>
         </button>

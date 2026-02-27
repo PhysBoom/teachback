@@ -26,8 +26,7 @@ export default function DashboardPage() {
   const [startTime, setStartTime] = useState("");
   const [duration, setDuration] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [meetingLink, setMeetingLink] = useState("");
-
+  const [meetingLink, setMeetingLink] = useState("");  
 
   const durationOptions = [
       { value: "15", label: "15 minutes" },
@@ -122,12 +121,12 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-navy-dark text-slate-900 dark:text-slate-200">
       <Header />
 
-      <div className="bg-white border-b border-slate-200 py-6 mt-4">
+      <div className="bg-white dark:bg-navy-dark border-b border-slate-200 dark:border-slate-800 py-6 mt-4">
         <div className="max-w-[1600px] mx-auto px-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <h1 className="font-display text-5xl font-medium tracking-tight text-slate-900">
+          <h1 className="font-display text-5xl font-medium tracking-tight text-slate-900 dark:text-white">
             My Classes
           </h1>
 
@@ -228,7 +227,7 @@ export default function DashboardPage() {
               accept="image/*"
               onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
             />
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Optional. Upload a cover image (PNG/JPG).
             </p>
           </Field>

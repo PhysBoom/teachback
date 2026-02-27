@@ -19,10 +19,10 @@ export default function Logo({ compact = false, textColor="", link = true }) {
   return (
     link ? (
       <Link to="/" className="inline-block">
-        <LogoContent compact={compact} textColor={textColor} />
+        <LogoContent compact={compact} textColor={textColor || "text-white"} />
       </Link>
     ) : (
-      <LogoContent compact={compact} textColor={textColor} />
+      <LogoContent compact={compact} textColor={textColor || "text-white"} />
     )
   );
 }

@@ -102,7 +102,7 @@ export default function LandingPage() {
                 Join thousands of students and lifelong learners who believe in the power of collaborative mastery.
               </p>
 
-              <Button size="lg" variant="primary">
+              <Button as="a" to="/signup" size="lg" variant="primary">
                 Join the Community
               </Button>
             </div>

@@ -43,10 +43,10 @@ export default function BrowseClassesPage() {
   }, [sessions, query, activeTopic]);
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-slate-50">
+    <div className="flex flex-col min-h-screen w-full bg-slate-50 dark:bg-navy-dark text-slate-900 dark:text-slate-200">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 bg-slate-50 dark:bg-navy-dark">
         <BrowseHero
           query={query}
           onQueryChange={setQuery}
