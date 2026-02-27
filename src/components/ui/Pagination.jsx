@@ -4,9 +4,7 @@ function getPageNumbers(currentPage, totalPages) {
   const pages = [];
 
   if (totalPages <= 7) {
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
-    }
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
     return pages;
   }
 
@@ -17,9 +15,7 @@ function getPageNumbers(currentPage, totalPages) {
 
   if (start > 2) pages.push("ellipsis-start");
 
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
+  for (let i = start; i <= end; i++) pages.push(i);
 
   if (end < totalPages - 1) pages.push("ellipsis-end");
 
@@ -39,6 +35,7 @@ export default function Pagination({
 
   return (
     <div className="mt-16 flex justify-center gap-2">
+      {/* Previous */}
       <button
         type="button"
         onClick={() => onPageChange(currentPage - 1)}
@@ -46,8 +43,8 @@ export default function Pagination({
         className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all
           ${
             currentPage === 1
-              ? "border-slate-200 text-slate-300 cursor-not-allowed"
-              : "border-slate-200 text-slate-400 hover:text-primary hover:border-primary"
+              ? "border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed"
+              : "border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-300 hover:text-primary hover:border-primary"
           }`}
         aria-label="Previous page"
       >
@@ -58,7 +55,7 @@ export default function Pagination({
         typeof p === "string" ? (
           <span
             key={p + index}
-            className="w-10 h-10 flex items-center justify-center text-slate-400"
+            className="w-10 h-10 flex items-center justify-center text-slate-400 dark:text-slate-500"
           >
             …
           </span>
@@ -69,8 +66,19 @@ export default function Pagination({
             onClick={() => onPageChange(p)}
             className={
               p === currentPage
-                ? "w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold"
-                : "w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-all"
+                ? `
+                  w-10 h-10 flex items-center justify-center
+                  rounded-lg bg-primary text-white font-bold
+                `
+                : `
+                  w-10 h-10 flex items-center justify-center
+                  rounded-lg border
+                  border-slate-200 dark:border-slate-700
+                  text-slate-600 dark:text-slate-300
+                  font-bold
+                  hover:bg-slate-50 dark:hover:bg-navy-lighter
+                  transition-all
+                `
             }
           >
             {p}
@@ -78,6 +86,7 @@ export default function Pagination({
         )
       )}
 
+      {/* Next */}
       <button
         type="button"
         onClick={() => onPageChange(currentPage + 1)}
@@ -85,8 +94,8 @@ export default function Pagination({
         className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all
           ${
             currentPage === totalPages
-              ? "border-slate-200 text-slate-300 cursor-not-allowed"
-              : "border-slate-200 text-slate-400 hover:text-primary hover:border-primary"
+              ? "border-slate-200 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed"
+              : "border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-300 hover:text-primary hover:border-primary"
           }`}
         aria-label="Next page"
       >

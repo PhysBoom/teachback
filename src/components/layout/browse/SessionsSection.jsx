@@ -4,7 +4,7 @@ import SessionCard from "../../ui/session-card/SessionCard";
 import Pagination from "../../ui/Pagination";
 import { useNavigate } from "react-router-dom";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 5;
 
 export default function SessionsSection({ title, sessions = [], onCta }) {
   const [page, setPage] = useState(1);
