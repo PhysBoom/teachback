@@ -1,4 +1,4 @@
-export default function SignupTextField({ label, id, type = "text", placeholder, value, onChange }) {
+export default function SignupTextField({ label, id, type = "text", placeholder, value, onChange, ...props }) {
   return (
     <div>
       <label
@@ -14,6 +14,7 @@ export default function SignupTextField({ label, id, type = "text", placeholder,
         value={value}
         onChange={onChange}
         className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-navy-deep font-medium placeholder:text-slate-400"
+        {...props}
       />
     </div>
   );

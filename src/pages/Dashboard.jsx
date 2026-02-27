@@ -125,9 +125,9 @@ export default function DashboardPage() {
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
 
-      <div className="bg-white border-b border-slate-200 py-6">
+      <div className="bg-white border-b border-slate-200 py-6 mt-4">
         <div className="max-w-[1600px] mx-auto px-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <h1 className="font-display text-5xl font-medium tracking-tight text-slate-900 mb-6">
+          <h1 className="font-display text-5xl font-medium tracking-tight text-slate-900">
             My Classes
           </h1>
 
@@ -219,6 +219,7 @@ export default function DashboardPage() {
               value={meetingLink}
               onChange={(e) => setMeetingLink(e.target.value)}
               placeholder="https://meet.google.com/..."
+              required
             />
           </Field>
 

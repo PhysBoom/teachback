@@ -99,6 +99,7 @@ function SignUpForm({ isSigningUp, setIsSigningUp}) {
             placeholder="John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
           <SignupTextField
             label="Email Address"
@@ -107,6 +108,7 @@ function SignUpForm({ isSigningUp, setIsSigningUp}) {
             placeholder="john@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <SignupTextField
             label="Password"
@@ -115,6 +117,7 @@ function SignUpForm({ isSigningUp, setIsSigningUp}) {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <div className="pt-4">

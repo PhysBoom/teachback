@@ -8,7 +8,7 @@ import { getSessions } from "../services/api";
 export default function BrowseClassesPage() {
   const [query, setQuery] = useState("");
   const [activeTopic, setActiveTopic] = useState("All Topics");
-  const topics = ["All Topics", "Science", "Technology", "Humanities", "Business", "Design"]
+  const topics = ["All Topics", "Science", "AI", "Humanities", "Psychology", "Design"]
   const [sessions, setSessions] = useState([]);
 
   async function loadSessions() {
@@ -21,14 +21,23 @@ export default function BrowseClassesPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+
     return sessions.filter((s) => {
+      const topics = Array.isArray(s.topics) ? s.topics : [];
+
       const matchesTopic =
-        activeTopic === "All Topics" ? true : s.topic.toLowerCase() === activeTopic.toLowerCase();
+        activeTopic === "All Topics"
+          ? true
+          : topics.some(
+              (t) => t.toLowerCase() === activeTopic.toLowerCase()
+            );
+
       const matchesQuery =
         !q ||
         s.title.toLowerCase().includes(q) ||
         s.description.toLowerCase().includes(q) ||
-        s.topic.toLowerCase().includes(q);
+        topics.some((t) => t.toLowerCase().includes(q));
+
       return matchesTopic && matchesQuery;
     });
   }, [sessions, query, activeTopic]);
