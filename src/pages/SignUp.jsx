@@ -3,7 +3,7 @@ import Button from "../components/ui/Button";
 import Logo from "../components/ui/Logo";
 import { useNavigate } from "react-router-dom";
 import GoogleButton from "../components/ui/signup/GoogleButton";
-import TextField from "../components/ui/signup/TextField";
+import SignupTextField from "../components/ui/signup/SignupTextField";
 import Divider from "../components/ui/signup/Divider";
 import { AuthContext } from "../contexts/auth/AuthContext";
 
@@ -93,14 +93,14 @@ function SignUpForm({ isSigningUp, setIsSigningUp}) {
         <Divider />
 
         <form className="space-y-4" onSubmit={onSubmit}>
-          <TextField
+          <SignupTextField
             label="Full Name"
             id="name"
             placeholder="John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <TextField
+          <SignupTextField
             label="Email Address"
             id="email"
             type="email"
@@ -108,7 +108,7 @@ function SignUpForm({ isSigningUp, setIsSigningUp}) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <TextField
+          <SignupTextField
             label="Password"
             id="password"
             type="password"
@@ -129,7 +129,7 @@ function SignUpForm({ isSigningUp, setIsSigningUp}) {
 }
 
 export default function SignUpPage() {
-  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(true);
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">

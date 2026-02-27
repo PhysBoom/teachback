@@ -21,15 +21,15 @@ function formatStartTime(startTime) {
   return `${datePart} • ${timePart}`;
 }
 
-export default function SessionCard({ session, onCta, showEditMenu = false }) {
+export default function SessionCard({ session, onEditClicked, onDeleteClicked, showEditMenu = false }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all group">
-      <CardMedia image={session.image} topic={session.topic} />
+    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all group">
+      <CardMedia sessionId={session.id} image={session.image} onEditClicked={onEditClicked} onDeleteClicked={onDeleteClicked} topics={session.topics} showEditMenu={showEditMenu}/>
 
       <div className="p-6">
         <DateChip label={formatStartTime(session.startTime)} />
         <h3 className="text-xl font-bold text-navy-deep mb-3 leading-tight">
-          {session.topic}
+          {session.title}
         </h3>
         <p className="text-slate-500 text-sm mb-6 line-clamp-2">
           {session.description}
@@ -39,7 +39,7 @@ export default function SessionCard({ session, onCta, showEditMenu = false }) {
           <UserPill name={session.teacher?.name} avatar={session.teacher?.avatar} />
           <Cta
             timeRemainingMs={session.startTime - Date.now()}
-            onClick={onCta}
+            meetingLink={session.meetingLink}
           />
         </div>
       </div>

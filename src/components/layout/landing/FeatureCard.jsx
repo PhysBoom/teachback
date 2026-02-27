@@ -1,5 +1,5 @@
-import Card from "../Card";
-import Icon from "../Icon";
+import Card from "../../ui/Card";
+import Icon from "../../ui/Icon";
 
 export default function FeatureCard({ icon, iconWrapClassName, title, description }) {
   return (

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 export default function EditMenu({
   onEditClicked,
   onDeleteClicked,
+  sessionId,
 }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
@@ -36,7 +37,7 @@ export default function EditMenu({
 
   function handleDelete() {
     setOpen(false);
-    onDeleteClicked?.();
+    onDeleteClicked?.(sessionId);
   }
 
   return (

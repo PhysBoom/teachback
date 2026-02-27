@@ -5,9 +5,9 @@ import Section from "../components/layout/Section.jsx";
 import Button from "../components/ui/Button.jsx";
 import Icon from "../components/ui/Icon.jsx";
 
-import Pill from "../components/ui/landing/Pill.jsx";
-import FeatureCard from "../components/ui/landing/FeatureCard.jsx";
-import SiteShell from "../components/ui/landing/SiteShell.jsx";
+import Pill from "../components/layout/landing/Pill.jsx";
+import FeatureCard from "../components/layout/landing/FeatureCard.jsx";
+import SiteShell from "../components/layout/landing/SiteShell.jsx";
 
 
 export default function LandingPage() {
@@ -31,11 +31,11 @@ export default function LandingPage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="md" variant="primary" className="min-w-[200px]">
+                <Button as="a" to="/signup" size="md" variant="primary" className="min-w-[200px]">
                   Get Started Free
                 </Button>
-                <Button size="md" variant="secondary" className="min-w-[200px]">
-                  Explore Topics
+                <Button as="a" to="/classes" size="md" variant="secondary" className="min-w-[200px]">
+                  Explore Classes
                 </Button>
               </div>
             </div>

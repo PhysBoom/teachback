@@ -1,14 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Header from "../components/layout/Header";
-import BrowseHero from "../components/ui/browse/BrowseHero";
-import SessionsSection from "../components/ui/browse/SessionsSection";
+import BrowseHero from "../components/layout/browse/BrowseHero";
+import SessionsSection from "../components/layout/browse/SessionsSection";
 import Footer from "../components/layout/Footer";
 import { getSessions } from "../services/api";
 
 export default function BrowseClassesPage() {
   const [query, setQuery] = useState("");
   const [activeTopic, setActiveTopic] = useState("All Topics");
-
   const topics = ["All Topics", "Science", "Technology", "Humanities", "Business", "Design"]
   const [sessions, setSessions] = useState([]);
 
@@ -50,11 +49,7 @@ export default function BrowseClassesPage() {
 
         <SessionsSection
           title="Upcoming Sessions"
-          badge="Live Now"
           sessions={filtered}
-          onFilterClick={() => console.log("filter")}
-          onCta={(session) => console.log("CTA:", session.id)}
-          onCreateTopic={() => console.log("create topic")}
         />
       </main>
 

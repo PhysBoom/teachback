@@ -1,12 +1,12 @@
 import EditMenu from "./EditMenu";
 import TopicBadge from "./TopicBadge";
 
-export default function CardMedia({ image, topic, showEditMenu = false }) {
+export default function CardMedia({ sessionId, image, onEditClicked, onDeleteClicked, topics = [], showEditMenu = false }) {
   return (
     <div className="h-48 relative overflow-hidden">
       {image ? (
         <img
-          alt={topic}
+          alt="Session cover"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           src={image}
         />
@@ -19,9 +19,28 @@ export default function CardMedia({ image, topic, showEditMenu = false }) {
           </span>
         </div>
       )}
-      <div className="flex flex-row absolute top-4 justify-between w-full px-4">
-        <TopicBadge topic={topic} />
-        {showEditMenu && <EditMenu onEditClicked={() => console.log("Edit clicked")} onDeleteClicked={() => console.log("Delete clicked")}/>}
+
+      {/* Top overlay */}
+      <div className="absolute top-4 left-0 right-0 px-4 flex items-start gap-3">
+        {/* Topics (left) */}
+        <div className="flex flex-wrap gap-2 min-w-0">
+          {topics
+            .filter(Boolean)
+            .map((topic) => (
+              <TopicBadge key={topic} topic={topic} />
+            ))}
+        </div>
+
+        {/* Edit menu (right) */}
+        {showEditMenu && (
+          <div className="ml-auto shrink-0">
+            <EditMenu
+              onEditClicked={onEditClicked}
+              onDeleteClicked={onDeleteClicked}
+              sessionId={sessionId}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

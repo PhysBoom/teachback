@@ -18,17 +18,19 @@ function makeTeacher(name, avatar) {
   };
 }
 
-function makeSession({ topic, description, image, startOffsetMinutes = 0, durationMinutes = 30, teacher }) {
+function makeSession({ topics, description, image, startOffsetMinutes = 0, durationMinutes = 30, teacher, title, meetingLink }) {
   const startTime = Date.now() + startOffsetMinutes * 60 * 1000;
   const endTime = startTime + durationMinutes * 60 * 1000;
   return {
     id: uuidv4(),
-    topic,
+    topics,
     description,
     image,
     startTime,
     endTime,
     teacher,
+    title,
+    meetingLink: meetingLink ?? `https://meet.google.com/123-efgh-123`
   };
 }
 
@@ -45,7 +47,8 @@ const _teachers = [
 
 const _sessions = [
   makeSession({
-    topic: "Computer Science",
+    topics: ["Computer Science", "AI"],
+    title: "Intro to Generative AI",
     description:
       "Deep dive into CycleGAN and StyleGAN. Learn by explaining the loss functions to your peers.",
     image:
@@ -55,21 +58,22 @@ const _sessions = [
     teacher: _teachers.find((t) => t.name === "Dr. Aris Thorne"),
   }),
 
-  // AI Mysticism (existing)
   makeSession({
-    topic: "AI Mysticism",
+    topics: ["AI Mysticism"],
+    title: "Can Machines Be Conscious?",
     description:
       "Exploring the philosophical boundaries of machine consciousness and the Turing test.",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDEsf-lKt0fW5qqTs3SV6UtvorrQZUtteey8SKsndOgcSpyzM_HI10MpteDV7J8coo-XWIdr_ZpIWaKRgo-sJYCSZmFDYuuUz4T1JYP_18dauID1aP9hi3b0IYfNVj-K9BOnR7JlMNzX9Eix2ko2EKN9s8sHNqqhSOIZBPsLRThXp5t2NGXD3egvFNNUfvRpAFW-eV8bOPGif3yEXCDaRJeUAc4tolSgW9RuPig9SDzWgquG0B4tLieLC3fnxXtIcmUeciFRJ2dnrM",
-    startOffsetMinutes: 15, // 15 minutes from now
+    startOffsetMinutes: -15,
     durationMinutes: 30,
     teacher: _teachers[0],
   }),
 
   // Quantum Computing (Tomorrow 10:00 AM)
   makeSession({
-    topic: "Physics",
+    topics: ["Physics"],
+    title: "Qubits for Everyone",
     description:
       "Explaining qubits through simple analogies. Perfect for those with zero physics background.",
     image:
@@ -81,7 +85,8 @@ const _sessions = [
 
   // Behavioral Economics (next Oct 25 at 14:00)
   makeSession({
-    topic: "Psychology",
+    topics: ["Psychology"],
+    title: "Nudge Theory in Action",
     description:
       "Why we make irrational decisions. Collaborative breakdown of Nudge Theory.",
     image: null,
@@ -92,7 +97,8 @@ const _sessions = [
 
   // Typography (next Oct 26 at 11:00)
   makeSession({
-    topic: "Design",
+    topics: ["Design"],
+    title: "The Art of Typography",
     description:
       "Master hierarchy and readability. Critique session where everyone teaches a rule.",
     image: null,
@@ -102,18 +108,170 @@ const _sessions = [
   }),
 ];
 
-export async function getSessions(teacherId) {
-  if (teacherId) {
-    const filtered = _sessions.filter(
-      (s) => s.teacher.id === teacherId
-    );
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result); // this is the data URL
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
-    return JSON.parse(JSON.stringify(filtered));
+export async function getSessions(teacherId) {
+  let result = _sessions;
+
+  if (teacherId) {
+    result = result.filter((s) => s.teacher.id === teacherId);
   }
 
-  return JSON.parse(JSON.stringify(_sessions));
+  // Sort by startTime ascending (earliest first)
+  const sorted = [...result].sort(
+    (a, b) => a.startTime - b.startTime
+  );
+
+  return JSON.parse(JSON.stringify(sorted));
 }
 
 export async function listTeachers() {
   return JSON.parse(JSON.stringify(_teachers));
+}
+
+export async function deleteSession(sessionId) {
+  const index = _sessions.findIndex((s) => s.id === sessionId);
+  if (index !== -1) {
+    _sessions.splice(index, 1);
+    return true;
+  }
+  return false;
+}
+
+export async function createSession({
+  teacherId,
+  topicCsv,
+  title,
+  description,
+  startTime,
+  durationMinutes,
+  image, // File | string | null
+  meetingLink
+}) {
+  const teacher =
+    _teachers.find((t) => t.id === teacherId) ?? _teachers[0];
+
+  const topics = String(topicCsv ?? "")
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+
+  // Normalize startTime into timestamp
+  const startMs =
+    typeof startTime === "number"
+      ? startTime
+      : startTime instanceof Date
+      ? startTime.getTime()
+      : new Date(startTime).getTime();
+
+  const durationMinsNum = Number(durationMinutes) || 30;
+  const endMs = startMs + durationMinsNum * 60 * 1000;
+
+  let imageValue = null;
+
+  if (image instanceof File) {
+    imageValue = await fileToBase64(image);
+  } else if (typeof image === "string") {
+    imageValue = image; // already a URL or base64
+  }
+
+  const newSession = {
+    id: uuidv4(),
+    topics,
+    title: title ?? "",
+    description: description ?? "",
+    image: imageValue,
+    startTime: startMs,
+    endTime: endMs,
+    teacher,
+    meetingLink
+  };
+
+  _sessions.push(newSession);
+
+  return JSON.parse(JSON.stringify(newSession));
+}
+
+export async function editSession(sessionId, {
+  teacherId,
+  topicCsv,
+  title,
+  description,
+  startTime, // number | Date | string
+  durationMinutes,
+  image, // File | string | null | undefined
+  meetingLink
+} = {}) {
+  const index = _sessions.findIndex((s) => s.id === sessionId);
+  if (index === -1) return null;
+
+  const existing = _sessions[index];
+
+  // Teacher (optional)
+  const teacher =
+    teacherId != null
+      ? _teachers.find((t) => t.id === teacherId) ?? existing.teacher
+      : existing.teacher;
+
+  // Topics (CSV only)
+  const nextTopics =
+    topicCsv != null
+      ? String(topicCsv)
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+      : existing.topics;
+
+  // Start time (optional)
+  const startMs =
+    startTime != null
+      ? typeof startTime === "number"
+        ? startTime
+        : startTime instanceof Date
+        ? startTime.getTime()
+        : new Date(startTime).getTime()
+      : existing.startTime;
+
+  // Duration (optional)
+  const durationMins =
+    durationMinutes != null
+      ? Number(durationMinutes) || 30
+      : Math.round((existing.endTime - existing.startTime) / 60000);
+
+  const endMs = startMs + durationMins * 60 * 1000;
+
+  // Image (optional)
+  let imageValue = existing.image;
+  if (image !== undefined) {
+    if (image === null) {
+      imageValue = null; // clear image
+    } else if (image instanceof File) {
+      imageValue = await fileToBase64(image);
+    } else if (typeof image === "string") {
+      imageValue = image;
+    }
+  }
+
+  const updated = {
+    ...existing,
+    teacher,
+    topics: nextTopics,
+    title: title != null ? String(title) : existing.title,
+    description: description != null ? String(description) : existing.description,
+    image: imageValue ?? existing.image,
+    startTime: startMs,
+    endTime: endMs,
+    meetingLink: meetingLink ?? existing.meetingLink
+  };
+
+  _sessions[index] = updated;
+
+  return JSON.parse(JSON.stringify(updated));
 }

@@ -21,7 +21,7 @@ function formatRemaining(ms) {
   return `${paddedHours}:${paddedMinutes}`;
 }
 
-export default function Cta({ timeRemainingMs, onClick }) {
+export default function Cta({ timeRemainingMs, meetingLink }) {
   const [remaining, setRemaining] = useState(
     typeof timeRemainingMs === "number" ? Math.max(0, timeRemainingMs) : null
   );
@@ -69,7 +69,7 @@ export default function Cta({ timeRemainingMs, onClick }) {
   if (remaining <= 0) {
     return (
       <Button
-        onClick={onClick}
+        onClick={() => window.open(meetingLink, "_blank", "noopener,noreferrer")}
         className="bg-primary text-white px-4 py-2 rounded font-bold text-xs hover:bg-blue-600 transition-colors"
       >
         Join Session

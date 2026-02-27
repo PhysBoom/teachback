@@ -1,4 +1,4 @@
-export default function TextField({ label, id, type = "text", placeholder, value, onChange }) {
+export default function SignupTextField({ label, id, type = "text", placeholder, value, onChange }) {
   return (
     <div>
       <label
