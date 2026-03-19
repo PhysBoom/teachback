@@ -8,7 +8,7 @@ export function registerAuthRoutes(app, credentialsProvider, usersProvider) {
 
   // Register user
   usersRouter.post("/", async (req, res) => {
-    const { username, email, password, name } = req.body ?? {};
+    const { username, email, password, name, avatar } = req.body ?? {};
 
     if (!username || !email || !password || !name) {
       res.status(400).send({
@@ -17,14 +17,15 @@ export function registerAuthRoutes(app, credentialsProvider, usersProvider) {
       return;
     }
 
-    const result = await credentialsProvider.registerUser(
+    const user = await credentialsProvider.registerUser(
       name,
       username,
       email,
-      password
+      password,
+      avatar
     );
 
-    if (!result) {
+    if (!user) {
       res.status(409).send({
         error: "Username or email already taken",
       });
@@ -33,7 +34,7 @@ export function registerAuthRoutes(app, credentialsProvider, usersProvider) {
 
     const token = await generateAuthToken(username);
 
-    res.status(201).send({ token })
+    res.status(201).send({ token, user })
   });
 
   // Login / create session

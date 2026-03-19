@@ -1,8 +1,7 @@
 import Header from "../components/layout/Header.jsx";
 import SessionCard from "../components/ui/session-card/SessionCard.jsx";
 import CreateTopicCard from "../components/ui/CreateTopicCard.jsx";
-import { useEffect, useState } from "react";
-import {createSession, deleteSession, editSession } from "../services/api.js";
+import { useEffect, useState, useContext } from "react";
 import Button from "../components/ui/Button.jsx";
 import Modal from "../components/ui/Modal.jsx";
 import DateTimeInput from "../components/ui/form/DateTimeInput.jsx";
@@ -11,7 +10,6 @@ import TextInput from "../components/ui/form/TextInput.jsx";
 import TextArea from "../components/ui/form/TextArea.jsx";
 import Select from "../components/ui/form/Select.jsx";
 import FileInput from "../components/ui/form/FileInput.jsx";
-import { useContext } from "react";
 import { AuthContext } from "../contexts/auth/AuthContext.js";
 
 export default function DashboardPage() {
@@ -21,6 +19,7 @@ export default function DashboardPage() {
     return params.get("schedulingSession") === "true";
   });
   const [editingSession, setEditingSession] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [topic, setTopic] = useState("");
   const [title, setTitle] = useState("");
@@ -28,26 +27,33 @@ export default function DashboardPage() {
   const [startTime, setStartTime] = useState("");
   const [duration, setDuration] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [meetingLink, setMeetingLink] = useState(""); 
-  const {sendAuthenticatedApiRequest} = useContext(AuthContext); 
+  const [meetingLink, setMeetingLink] = useState("");
+
+  const { sendAuthenticatedApiRequest, user } = useContext(AuthContext);
 
   const durationOptions = [
-      { value: "15", label: "15 minutes" },
-      { value: "30", label: "30 minutes" },
-      { value: "45", label: "45 minutes" },
-      { value: "60", label: "1 hour" },
-      { value: "90", label: "1.5 hours" },
-      { value: "120", label: "2 hours" },
-  ]
+    { value: "15", label: "15 minutes" },
+    { value: "30", label: "30 minutes" },
+    { value: "45", label: "45 minutes" },
+    { value: "60", label: "1 hour" },
+    { value: "90", label: "1.5 hours" },
+    { value: "120", label: "2 hours" },
+  ];
 
   async function loadSessions() {
-    const me = await sendAuthenticatedApiRequest("/api/users/me");
-
     const sessions = await sendAuthenticatedApiRequest(
-      `/api/classes?teacherId=${encodeURIComponent(me.username)}`
+      `/api/classes?teacherId=${encodeURIComponent(user.username)}`
     );
 
     setSessions(sessions);
+  }
+
+  async function handleDeleteSession(sessionId) {
+    await sendAuthenticatedApiRequest(`/api/classes/${sessionId}`, {
+      method: "DELETE",
+    });
+
+    await loadSessions();
   }
 
   function fileToDataUrl(file) {
@@ -100,6 +106,7 @@ export default function DashboardPage() {
   }
 
   function closeScheduleModal() {
+    if (isSubmitting) return;
     setScheduleSessionModalOpened(false);
   }
 
@@ -109,45 +116,51 @@ export default function DashboardPage() {
 
   async function handleSubmitSchedule(e) {
     e.preventDefault();
+    if (isSubmitting) return;
 
-    const imageDataUrl = imageFile ? await fileToDataUrl(imageFile) : null;
+    try {
+      setIsSubmitting(true);
 
-    const payload = {
-      topicCsv: topic,
-      title,
-      description,
-      startTime,
-      durationMinutes: duration ? Number(duration) : null,
-      meetingLink,
-    };
+      const imageDataUrl = imageFile ? await fileToDataUrl(imageFile) : null;
 
-    // only include image if a new one was selected
-    if (imageDataUrl) {
-      payload.image = imageDataUrl;
+      const payload = {
+        topicCsv: topic,
+        title,
+        description,
+        startTime,
+        durationMinutes: duration ? Number(duration) : null,
+        meetingLink,
+      };
+
+      if (imageDataUrl) {
+        payload.image = imageDataUrl;
+      }
+
+      if (editingSession) {
+        await sendAuthenticatedApiRequest(`/api/classes/${editingSession.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        await sendAuthenticatedApiRequest("/api/classes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      await loadSessions();
+      closeScheduleModal();
+      resetScheduleForm();
+      setEditingSession(null);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    if (editingSession) {
-      await sendAuthenticatedApiRequest(`/api/classes/${editingSession.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-    } else {
-      await sendAuthenticatedApiRequest("/api/classes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-    }
-
-    await loadSessions();
-    closeScheduleModal();
-    resetScheduleForm();
-    setEditingSession(null);
   }
 
   return (
@@ -178,10 +191,7 @@ export default function DashboardPage() {
                 onCta={() => handleJoin(s)}
                 showEditMenu={true}
                 onEditClicked={() => handleOpenEdit(s)}
-                onDeleteClicked={async (sessionId) => {
-                  await deleteSession(sessionId);
-                  await loadSessions();
-                }}
+                onDeleteClicked={() => handleDeleteSession(s.id)}
               />
             ))}
 
@@ -194,7 +204,11 @@ export default function DashboardPage() {
         </div>
       </main>
 
-      <Modal title={editingSession ? "Edit Session" : "Schedule a Session"} onClose={closeScheduleModal} open={scheduleSessionModalOpened}>
+      <Modal
+        title={editingSession ? "Edit Session" : "Schedule a Session"}
+        onClose={closeScheduleModal}
+        open={scheduleSessionModalOpened}
+      >
         <form onSubmit={handleSubmitSchedule} className="space-y-5">
           <Field label="Title">
             <TextInput
@@ -263,10 +277,23 @@ export default function DashboardPage() {
           </Field>
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <Button type="button" variant="secondary" onClick={closeScheduleModal}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={closeScheduleModal}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
-            <Button type="submit">Schedule</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting
+                ? editingSession
+                  ? "Saving..."
+                  : "Scheduling..."
+                : editingSession
+                  ? "Save Changes"
+                  : "Schedule"}
+            </Button>
           </div>
         </form>
       </Modal>

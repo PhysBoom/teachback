@@ -1,12 +1,11 @@
-import React from "react";
-
 export default function DateTimeInput({ value, onChange, ...props }) {
+  const pad = (n) => String(n).padStart(2, "0");
+
   const now = new Date();
-  const minValue = new Date(
-    now.getTime() - now.getSeconds() * 1000 - now.getMilliseconds()
-  )
-    .toISOString()
-    .slice(0, 16);
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+
+  const minValue = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
   return (
     <input
@@ -14,16 +13,6 @@ export default function DateTimeInput({ value, onChange, ...props }) {
       min={minValue}
       value={value}
       onChange={onChange}
-      className="
-        w-full rounded-lg
-        border border-slate-300 dark:border-slate-700
-        bg-white dark:bg-navy-lighter
-        px-3 py-2
-        text-slate-900 dark:text-slate-100
-        focus:outline-none
-        focus:ring-2 focus:ring-slate-400 dark:focus:ring-primary
-        placeholder:text-slate-400 dark:placeholder:text-slate-500
-      "
       {...props}
     />
   );

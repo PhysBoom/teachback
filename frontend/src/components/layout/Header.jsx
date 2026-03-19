@@ -95,11 +95,15 @@ export default function Header({
 
         {/* Auth Area */}
         {!showLogoOnly &&
-          (auth.userId ? (
+          (auth.user ? (
             <UserPill
               textColor="text-white"
-              name="John Doe"
-              avatar="https://lh3.googleusercontent.com/aida-public/AB6AXuAtKoRJvGdeDO9bllNk6BGClcR6SM7dlXw1rch8cXFXsVazBABq-owzNrMCjk5P-BY6nY3Sg8UgRznRLHoxpKT_TJBHIK0aIyrR5grG0Lpo0JQgHhXF-G9q6eliHVWOZGZDvqoDJkpbD9GA_e47FTlNbWaDNWE33Hiomd_XjqLhW2htiL26bGhJQCmqROVfNCYMy1iChZ_taK-5xrhRid8YMhv6rKy0qBRSOoptcLSWM_TyVs6YhdZTMn5Glksx8vn5LNQVPhFU1Aw"
+              name={auth.user.name || auth.user.username}
+              avatar={
+                auth.user.avatar ||
+                "https://ui-avatars.com/api/?name=" +
+                  encodeURIComponent(auth.user.name || auth.user.username)
+              }
               onClick={() => navigate("/dashboard")}
               showLogout={true}
             />

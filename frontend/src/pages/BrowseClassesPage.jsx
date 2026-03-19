@@ -3,7 +3,6 @@ import Header from "../components/layout/Header";
 import BrowseHero from "../components/layout/browse/BrowseHero";
 import SessionsSection from "../components/layout/browse/SessionsSection";
 import Footer from "../components/layout/Footer";
-import { getSessions } from "../services/api";
 
 export default function BrowseClassesPage() {
   const [query, setQuery] = useState("");
@@ -11,11 +10,14 @@ export default function BrowseClassesPage() {
   const topics = ["All Topics", "Science", "AI", "Humanities", "Psychology", "Design"]
   const [sessions, setSessions] = useState([]);
 
-  async function loadSessions() {
-    setSessions(await getSessions());
-  }
-
   useEffect(() => {
+      async function loadSessions() {
+        const sessions = await fetch(
+          `/api/classes`
+        );
+        setSessions(await sessions.json());
+      }
+
     loadSessions();
   }, []);
 
